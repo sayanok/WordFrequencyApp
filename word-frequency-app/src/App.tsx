@@ -3,7 +3,7 @@ import React, { useState } from "react";
 const App: React.FC = () => {
   const [inputText, setInputText] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [aggregateResult, setAggregateResult] = useState<Array<{ key: string; value: number }>>();
+  const [aggregateResult, setAggregateResult] = useState<Array<{ word: string; count: number }>>();
 
   function onClickHandler() {
     if (inputText) {
@@ -15,12 +15,10 @@ const App: React.FC = () => {
   }
 
   function tallyWords() {
-    const array = inputText.split(" ");
+    const words = inputText.split(" ");
     const result: { [key: string]: number } = {};
 
-    for (let n = 0; n < array.length; n++) {
-      const word = array[n];
-
+    for (let word of words) {
       if (!result[word]) {
         result[word] = 1;
       } else {
@@ -28,8 +26,8 @@ const App: React.FC = () => {
       }
     }
 
-    const sortedResult = Object.keys(result).map((k) => ({ key: k, value: result[k] }));
-    sortedResult.sort((a, b) => b.value - a.value);
+    const sortedResult = Object.keys(result).map((k) => ({ word: k, count: result[k] }));
+    sortedResult.sort((a, b) => b.count - a.count);
     setAggregateResult(sortedResult);
   }
 
@@ -45,10 +43,10 @@ const App: React.FC = () => {
           <th>出現回数</th>
         </tr>
         {aggregateResult ? (
-          aggregateResult.map((word: { key: string; value: number }) => {
+          aggregateResult.map((word) => {
             return (
               <tr>
-                <td>{word.key}</td> <td> {word.value}</td>
+                <td>{word.word}</td> <td> {word.count}</td>
               </tr>
             );
           })
